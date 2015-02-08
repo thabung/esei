@@ -1,0 +1,66 @@
+.search_box {
+    display: block;
+    font-weight: 100;
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 9px 40px 8px 9px;
+    font-size: 18px;
+    box-shadow: inset 1px 2px 4px rgba(100,100,100,.1);
+}
+
+.search_button {
+    border: 0;
+    padding: 0;
+    background: url(https://a-v2.sndcdn.com/assets/images/nav-items/glass-3323bb.png) center 9px no-repeat;
+    text-indent: -9999em;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: 1px;
+    top: 0;
+
+}
+
+dl.fields{
+    clear: left;
+    margin: 0;
+    padding: 18px 0;
+    list-style-type: none;
+}
+
+dl.fields dt{
+    width: 140px;
+    float: left;
+    clear: left;
+}
+
+dl.fields dd{
+    margin-left: 150px;
+}
+
+ul.items{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul.items li{
+    padding: 10px;
+    margin: 5px 0;
+}
+
+.paginating{
+    opacity: 0.5;
+}
+
+.song_name{
+    float: left;
+    width: 70%;
+    overflow: hidden;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.play_button {
+    cursor:pointer;
+}

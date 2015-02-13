@@ -121,11 +121,8 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
-//                'Atrauzzi\LaravelDoctrine\ServiceProvider',
-//                
-            // Angel service providers
+            
                 'Angel\Providers\SongsProvider'
-//                 Angel\Providers\SongsProvider
 	),
 
 	/*

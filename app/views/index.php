@@ -1,17 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="SongsPlayer">
     <head>
         <title>Play your favorite songs</title>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.js"></script>
-        <script type="text/javascript" src="/lib/taggedInfiniteScroll.js"></script>
+        <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.js"></script>-->
+       
+        <script src="/js/lib/bower_components/angular/angular.min.js"></script>
+	<script src="/js/lib/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+	
+        <script type="text/javascript" src="/js/lib/taggedInfiniteScroll.js"></script>
         <link type="text/css" rel="stylesheet" href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css"></link>
         <link type="text/css" rel="stylesheet" href="/css/app/main.css"></link>
-    </head>
-    <body ng-app="SongApp" ng-cloak>
         
+        <script src="/js/lib/bower_components/videogular/videogular.js"></script>
+	<script src="/js/lib/bower_components/videogular-controls/vg-controls.js"></script>
+	<script src="/js/lib/bower_components/videogular-overlay-play/vg-overlay-play.js"></script>
+	<script src="/js/lib/bower_components/videogular-poster/vg-poster.js"></script>
+	<script src="/js/lib/bower_components/videogular-buffering/vg-buffering.js"></script>
+        <script src="/js/app/music-player.js"></script>
+
+    </head>
+    <body  ng-cloak>
+
 
         <div class="container">
-            <div ng-controller="SongsPlayListController">
+            <!--songs playlist controller-->
+            
+            
+            
+            <div ng-controller="PlayListCtrl">
                 <div> 
                     <input class="" placeholder="Song name" type="text" ng-model="song_name"><p ng-bind="song_name">{{song_name}}</p>
                     <button ng-click="search()">Search</button>
@@ -24,87 +40,52 @@
                             <div><audio controls> <source ng-src="{{trustSrc(item.url)}}" type="audio/mpeg"></audio></div>
                             <div>{{ item.name}}</div>
                             <div>{{ item.url}}</div>
-                            
+
                         </li>
                     </ul>
-                    <div ng-click="getMore()">Click more..... </div>
+                    <div ng-click="getData()">Click more..... </div>
                 </div>
             </div>
+            
+            
+            
+            
+            <div style="height:50px" ng-controller="SongsPlayerCtrl as controller">
+                    <videogular vg-theme="controller.config.theme">
+                            <vg-media vg-src="controller.config.sources"
+                                            vg-tracks="controller.config.tracks">
+                            </vg-media>
+
+                            <vg-controls>
+                                    <vg-play-pause-button></vg-play-pause-button>
+                                    <vg-time-display>{{ currentTime | date:'mm:ss' }}</vg-time-display>
+                                    <vg-scrub-bar>
+                                            <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+                                    </vg-scrub-bar>
+                                    <vg-time-display>{{ timeLeft | date:'mm:ss' }}</vg-time-display>
+                                    <vg-volume>
+                                            <vg-mute-button></vg-mute-button>
+                                            <vg-volume-bar></vg-volume-bar>
+                                    </vg-volume>
+                                    <vg-fullscreen-button></vg-fullscreen-button>
+                            </vg-controls>
+
+                            <vg-overlay-play></vg-overlay-play>
+                            <vg-poster vg-url='controller.config.plugins.poster'></vg-poster>
+                    </videogular>
+            </div>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
 
-        <script type="text/javascript">
-            var demo = angular.module('SongApp', ['tagged.directives.infiniteScroll'])
-                    .controller('SongsPlayListController', SongsPlayListController);
-
-
-
-            function SongsPlayListController($scope, $http,$sce) {
-
-                $scope.items = [];
-                $scope.distance = 0;
-                $scope.paginating = false;
-                $scope.enabled = true;
-                $scope.setVariables = function (keyword)
-                {
-                    $scope.limit = 4;
-                    $scope.offset = 0;
-                    $scope.word = keyword;
-                };
-
-
-                $scope.getMore = function () {
-                    if (true === $scope.paginating) {
-                        return;
-                    }
-                    $scope.paginating = true;
-                    url = "http://local.esei/search?word="+$scope.word+"&limit=" + $scope.limit + "&offset=" + $scope.offset;
-                    $scope.offset = $scope.offset + $scope.limit;
-                    httpObj = $http.get(url);
-                    httpObj.success(function (data) {
-
-                        var items = data;
-                        for (var i = 0; i < items.length; i++) {
-                            $scope.items.push({
-                                id: items[i].id,
-                                name: items[i].name,
-                                title: items[i].title,
-                                url:items[i].url,
-                                styles: {
-                                    background: 'hsl(' + (i * 107) % 360 + ', 70%, 85%)'
-                                }
-                            });
-
-
-                        }
-                        //this.after = "t3_" + items[items.length - 1].id;
-                        if (0 == data.length) {
-                            $scope.paginating = true;
-                        } else {
-                            $scope.paginating = false;
-
-                        }
-
-                    });
-
-
-                    //ends here///
-                };
-
-
-
-                $scope.search = function () {
-                    $scope.paginating = false;
-                    $scope.items = [];
-
-                    $scope.setVariables($scope.song_name);
-                    $scope.getMore();
-                }
-                
-                
-                 $scope.trustSrc = function(src) {
-                    return $sce.trustAsResourceUrl(src);
-                  }
-            }
-        </script>
+        
     </body>
 </html>

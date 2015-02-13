@@ -2,26 +2,37 @@
 
 class SongsController extends BaseController {
 
+    
+    /**
+     * Display all the songs
+     */
     public function showAll() {
         $songList = Angel\Facades\SongsRepository::searchSong();
         return $this->getResponse($songList);
     }
 
+    /**
+     * Get a Song
+     * 
+     * @param int $id
+     * @return Song
+     */
     public function showOne($id) {
-//        die("showOne");
         $paramList = array('id' => $id);
         $songList = Angel\Facades\SongsRepository::searchSong($paramList);
         return $this->getResponse($songList);
     }
 
+    
+    /**
+     * Search songs with search parameters
+     * 
+     * @return type
+     */
     public function search() {
-        
         $paramList = Input::all();
         $songList = Angel\Facades\SongsRepository::searchSong($paramList);
         return $this->getResponse($songList);
-        
-        
-        
     }
     
     

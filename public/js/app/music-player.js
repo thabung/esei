@@ -1,45 +1,47 @@
 'use strict';
 var songsPlayerModule = angular.module('SongsPlayer',
-		[
-			"ngSanitize",
-			"com.2fdevs.videogular",
-			"com.2fdevs.videogular.plugins.controls",
-			"com.2fdevs.videogular.plugins.overlayplay",
-			"com.2fdevs.videogular.plugins.poster",
-                        "tagged.directives.infiniteScroll"
-		]);
-                        
-	songsPlayerModule.controller('SongsPlayerCtrl',
-		["$sce", function ($sce) {
-			this.config = {
-				sources: [
-					{src: $sce.trustAsResourceUrl("http://a.tumblr.com/tumblr_lppf8q8GW11qa863po1.mp3"),type:"audio/mpeg"},
-					
-				],
-				tracks: [
-					{
-						src: "http://www.videogular.com/assets/subs/pale-blue-dot.vtt",
-						kind: "subtitles",
-						srclang: "en",
-						label: "English",
-						default: ""
-					}
-				],
-				theme: "/js/lib/bower_components/videogular-themes-default/videogular.css",
-				plugins: {
-					poster: "http://www.videogular.com/assets/images/videogular.png"
-				}
-			};
-		}]
-	);
+        [
+            "ngSanitize",
+            "com.2fdevs.videogular",
+            "com.2fdevs.videogular.plugins.controls",
+            "com.2fdevs.videogular.plugins.overlayplay",
+            "com.2fdevs.videogular.plugins.poster",
+            "tagged.directives.infiniteScroll"
+        ]);
+
+songsPlayerModule.controller('SongsPlayerCtrl',
+        ["$sce", '$http', '$scope', function ($sce, $http, $scope) {
+                
+                /* player properties starts here*/
+                $scope.config = {
+                    sources: [
+                        {src: $sce.trustAsResourceUrl("http://a.tumblr.com/tumblr_lppf8q8GW11qa863po1.mp3"), type: "audio/mpeg"},
+                    ],
+                    tracks: [
+                        {
+                            src: "http://www.videogular.com/assets/subs/pale-blue-dot.vtt",
+                            kind: "subtitles",
+                            srclang: "en",
+                            label: "English",
+                            default: ""
+                        }
+                    ],
+                    theme: "/js/lib/bower_components/videogular-themes-default/videogular.css",
+                    plugins: {
+                        poster: "http://www.videogular.com/assets/images/videogular.png"
+                    }
+                };
 
 
-songsPlayerModule.controller('PlayListCtrl',
-        ['$scope', '$http', '$sce', function ($scope, $http, $sce) {
+                /* player properties ends here*/
+
+
+                $scope.playNewSong = function(song){
+                    $scope.config.sources = [{src: $sce.trustAsResourceUrl(song.url), type: "audio/mpeg"}];
+                }
 
 
 
-        
                 $scope.items = [];
                 $scope.distance = 0;
                 $scope.paginating = false;
@@ -53,7 +55,7 @@ songsPlayerModule.controller('PlayListCtrl',
 
 
                 $scope.getData = function () {
-                    
+
                     if (true === $scope.paginating) {
                         return;
                     }
@@ -87,7 +89,7 @@ songsPlayerModule.controller('PlayListCtrl',
 //                    $http.jsonp($scope.url).failure(function() {
 //                        console.log("inside fialure");
 //                    });
-                console.log("after json p");
+                    console.log("after json p");
 
                 };
                 $scope.search = function () {
@@ -96,15 +98,15 @@ songsPlayerModule.controller('PlayListCtrl',
 
                     $scope.setVariables($scope.song_name);
                     $scope.getData();
-                }
+                };
+                
+                
                 $scope.trustSrc = function (src) {
                     return $sce.trustAsResourceUrl(src);
-                }
+                };
 
-
-
-
-            }]);
+            }]
+        );
 
 
 

@@ -23,11 +23,14 @@
 
 
         <div class="container">
+            
+            
+            <div ng-controller="SongsPlayerCtrl">
             <!--songs playlist controller-->
             
             
             
-            <div ng-controller="PlayListCtrl">
+            <div>
                 <div> 
                     <input class="" placeholder="Song name" type="text" ng-model="song_name"><p ng-bind="song_name">{{song_name}}</p>
                     <button ng-click="search()">Search</button>
@@ -38,6 +41,7 @@
                         <li ng-repeat="item in items" ng-style="item.styles">
                             <div class="song_name">{{ item.name}}</div>
                             <div><audio controls> <source ng-src="{{trustSrc(item.url)}}" type="audio/mpeg"></audio></div>
+                            <div ng-click="playNewSong(item)">Play</div>
                             <div>{{ item.name}}</div>
                             <div>{{ item.url}}</div>
 
@@ -50,10 +54,10 @@
             
             
             
-            <div style="height:50px" ng-controller="SongsPlayerCtrl as controller">
-                    <videogular vg-theme="controller.config.theme">
-                            <vg-media vg-src="controller.config.sources"
-                                            vg-tracks="controller.config.tracks">
+            <div style="height:50px" >
+                    <videogular vg-theme="config.theme">
+                            <vg-media vg-src="config.sources"
+                                            vg-tracks="config.tracks">
                             </vg-media>
 
                             <vg-controls>
@@ -71,7 +75,7 @@
                             </vg-controls>
 
                             <vg-overlay-play></vg-overlay-play>
-                            <vg-poster vg-url='controller.config.plugins.poster'></vg-poster>
+                            <vg-poster vg-url='config.plugins.poster'></vg-poster>
                     </videogular>
             </div>
             
@@ -82,7 +86,7 @@
             
             
             
-            
+            </div>
             
         </div>
 

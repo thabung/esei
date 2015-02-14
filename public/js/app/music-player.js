@@ -11,7 +11,7 @@ var songsPlayerModule = angular.module('SongsPlayer',
 
 songsPlayerModule.controller('SongsPlayerCtrl',
         ["$sce", '$http', '$scope', function ($sce, $http, $scope) {
-                
+
                 /* player properties starts here*/
                 $scope.config = {
                     sources: [
@@ -35,10 +35,48 @@ songsPlayerModule.controller('SongsPlayerCtrl',
 
                 /* player properties ends here*/
 
+                $scope.currentSongIndex = 0;
+                /**
+                 * plays the current song
+                 * 
+                 * @param {type} songKey
+                 * @returns {undefined}
+                 */
+                $scope.playSong = function (songKey) {
+                    $scope.currentSongIndex = songKey;
+                    $scope.API.stop();
+                    $scope.config.sources = [{src: $sce.trustAsResourceUrl($scope.items[songKey].url), type: "audio/mpeg"}];
+                    $scope.API.play();
+                };
 
-                $scope.playNewSong = function(song){
-                    $scope.config.sources = [{src: $sce.trustAsResourceUrl(song.url), type: "audio/mpeg"}];
-                }
+
+                /**
+                 * plays prev/next song
+                 * 
+                 * @param {integer} prevNext 0=previous, 1=next
+                 * @returns {undefined}
+                 */
+                $scope.playPreNextSong = function (prevNext) {
+                    if (0 === prevNext) {
+                        $scope.currentSongIndex--;
+                    } else if (1 === prevNext) {
+                        $scope.currentSongIndex++;
+                    }
+                    $scope.playSong($scope.currentSongIndex);
+                };
+
+                /**
+                 * Injecting API object on ready
+                 * 
+                 * @param {type} API
+                 * @returns {undefined}
+                 */
+                $scope.onPlayerReady = function (API) {
+                    $scope.API = API;
+                };
+
+
+
 
 
 
@@ -86,10 +124,6 @@ songsPlayerModule.controller('SongsPlayerCtrl',
                         }
 
                     });
-//                    $http.jsonp($scope.url).failure(function() {
-//                        console.log("inside fialure");
-//                    });
-                    console.log("after json p");
 
                 };
                 $scope.search = function () {
@@ -99,15 +133,34 @@ songsPlayerModule.controller('SongsPlayerCtrl',
                     $scope.setVariables($scope.song_name);
                     $scope.getData();
                 };
-                
-                
+
+
                 $scope.trustSrc = function (src) {
                     return $sce.trustAsResourceUrl(src);
                 };
+
+
+
+
+
 
             }]
         );
 
 
-
-
+songsPlayerModule.directive("prevButton",
+        function () {
+            return {
+                restrict: "E",
+                template: "<div class='prev-next-button' ng-click='playPreNextSong(0)'>prev</div>"
+            }
+        }
+);
+songsPlayerModule.directive("nextButton",
+        function () {
+            return {
+                restrict: "E",
+                template: "<div class='prev-next-button' ng-click='playPreNextSong(1)'>next</div>"
+            }
+        }
+);
